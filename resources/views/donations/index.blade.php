@@ -11,6 +11,7 @@
             <tr>
                 <th>ID</th>
                 <th>Status</th>
+                <th>waktu</th>
                 <th>Image</th>
                 @if (Auth::user()->is_admin)
                     <th>Action</th>
@@ -20,8 +21,10 @@
         <tbody>
             @foreach ($donations as $donation)
                 <tr>
-                    <td>{{ $donation->id }}</td>
+                    <td>{{ $loop->iteration }}</td>
                     <td>{{ $donation->status }}</td>
+                    <td>{{ $donation->created_at }}</td>
+
                     <td><img src="{{ Storage::url('public/blogs/').$donation->image_path }}" width="100"></td>
                     @if (Auth::user()->is_admin)
                         <td>
@@ -29,8 +32,12 @@
                                 <form action="{{ route('donations.approve', $donation) }}" method="POST">
                                     @csrf
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-success">Approve</button>
+                                    <button type="submit" class="btn btn-danger">Approve</button>
                                 </form>
+                            @endif
+                            @if ($donation->status == 'approved')
+                                @csrf
+                                <button disabled="disabled" class="btn btn-success">Approved</button>
                             @endif
                         </td>
                     @endif

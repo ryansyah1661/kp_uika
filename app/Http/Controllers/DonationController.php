@@ -10,9 +10,13 @@ class DonationController extends Controller
 {
     public function index()
     {
-        $donations = Auth::user()->is_admin ? Donation::all() : Auth::user()->donations;
+        $donations = Auth::user()->is_admin 
+            ? Donation::orderBy('created_at', 'desc')->get() 
+            : Auth::user()->donations()->orderBy('created_at', 'desc')->get();
+
         return view('donations.index', compact('donations'));
     }
+
 
     public function create()
     {
